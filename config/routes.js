@@ -5,12 +5,15 @@
 
     module.exports = function (app) {
         app.get("/", function (req, res) {
-            res.send("<form action='/yout' method='post'><input name='url' type='text'/><input type='submit'/></form>");
+            res.send("Clumsy");
         });
 
-        app.post("/yout", function (req, res) {
-            res.render("yt.html");
-            //request(req.body.url).pipe(res);
+        app.get("/pipe", function (req, res) {
+            res.send("<form action='/pipe' method='post'><input name='url' type='text'/><input type='submit'/></form>");
+        });
+
+        app.post("/pipe", function (req, res) {
+            request(req.body.url).pipe(res);
         });
     };
 }());
