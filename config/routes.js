@@ -13,7 +13,11 @@
         });
 
         app.post("/pipe", function (req, res) {
-            request(req.body.url).pipe(res);
+            try {
+                request(req.body.url).pipe(res);
+            } catch (e) {
+                res.send("Please enter valid url");
+            }
         });
     };
 }());
