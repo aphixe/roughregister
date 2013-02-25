@@ -16,7 +16,8 @@
             try {
                 request(req.body.url).pipe(res);
             } catch (e) {
-                res.send("Please enter valid url");
+                res.send("Invalid URL.<br>" + 
+                    "<form action='/pipe' method='post'><input name='url' type='text'/><input type='submit'/></form>");
             }
         });
     };
