@@ -1,13 +1,15 @@
-var express = require("express");
+(function () {
+    "use strict";
 
-var app = express();
+    var express = require("express"),
+        app = express();
 
-console.log(__dirname);
-app.get("/", function (request, response) {
-    response.send("Hello Worlds");
-});
+    require("./config/middleware.js")(app);
+    require("./config/routes.js")(app);
 
-var port = process.env.PORT || 5000;
-app.listen(port, function () {
-    console.log("Listening on " + port);
-});
+    var port = process.env.PORT || 5000;
+    app.listen(port, function () {
+        console.log("Listening on " + port);
+    });
+
+}());

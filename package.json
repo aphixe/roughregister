@@ -1,15 +1,18 @@
 {
-    "name": "roughregister",
-    "version": "0.0.1",
-    "dependencies": {
-        "express": "3.1.x",
-        "request": "~2.14.0"
-    },
-    "scripts": {
-        "start": "node web.js"
-    },
-    "engines": {
-        "node": "0.8.x",
-        "npm": "1.1.x"
-    }
+  "name": "roughregister",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "~3.1.0",
+    "request": "~2.14.0",
+    "nano": "~3.3.6",
+    "couchapp": "~0.9.1",
+    "locomotive": "~0.3.6"
+  },
+  "scripts": {
+    "start": "node web.js"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  }
 }
