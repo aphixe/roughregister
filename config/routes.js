@@ -5,7 +5,12 @@
 
     module.exports = function (app) {
         app.get("/", function (req, res) {
-            res.send("Hello Ji");
+            res.send("<form action='/yout' method='post'><input name='url' type='text'/><input type='submit'/></form>");
         });
 
+        app.post("/yout", function (req, res) {
+            res.render("yt.html");
+            //request(req.body.url).pipe(res);
+        });
+    };
 }());
