@@ -1,10 +1,10 @@
 (function () {
     "use strict";
 
-    var express = require("express"),
-        app = require("./main.js");
+    var express = require("express");
 
-    module.exports = function () {
+    module.exports = function (app) {
+        log("adding bodyparser");
         app.use(express.bodyParser());
     };
 

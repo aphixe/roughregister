@@ -1,9 +1,7 @@
 (function () {
     "use strict";
 
-    module.exports = function () {
-        var app = this;
-
+    module.exports = function (app) {
         app.set("port", process.env.PORT || 5000);
     };
     
