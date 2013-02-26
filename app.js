@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    var express = require("express"),
-        app = express();
+    var app = module.exports = require("express")();
 
-    require("./config/middleware.js")(app);
-    require("./config/routes.js")(app);
+    //require("./main").init(app);
+    app.get("/", function (req, res) { res.send("clumsy"); });
 
     var port = process.env.PORT || 5000;
     app.listen(port, function () {
