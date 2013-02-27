@@ -1,4 +1,4 @@
-log = function () {}; // console.log;
+log = console.log; // function () {}; // 
 notify = console.log;
 
 (function () {

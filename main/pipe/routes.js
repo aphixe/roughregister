@@ -8,8 +8,8 @@
     var form = "<form action='/pipe' method='post'><input name='url' type='text'/><input type='submit'/></form>";
 
     function routeHandler(req, res) {
-        var url = req.body && req.body.url;
-        url = url || (req.query && req.query.url);
+        var url = (req.body && req.body.url) || (req.query && req.query.url),
+            isJsRequest = (req.body && req.body.js) || (req.query && req.query.js);
 
         if (url) {
             log("got url: " + url);
@@ -17,39 +17,51 @@
                 if (url.indexOf("//") === 0) {
                     url = "http:" + url;
                 }
-                request(url, function (urlErr, urlRes, urlBody) {
-                    jsdom.env(urlBody, ["http://code.jquery.com/jquery.js"], function (err, window) {
-                        var $ = window.jQuery;
+                if (isJsRequest) {
+                    log("piping straight through: " + isJsRequest);
+                    request(url).pipe(res);
+                } else {
+                    request(url, function (urlErr, urlRes, urlBody) {
+                        jsdom.env(urlBody, ["http://code.jquery.com/jquery.js"], function (err, window) {
+                            var $ = window.jQuery;
 
-                        var scripts = $("script").filter(function (i, elem) {
-                            return elem.src;
-                        });
+                            function sendResponse() {
+                                console.log("script length achieved: " + scripts.length);
+                                res.send($("<div>").append($("html").clone()).remove().html());
+                            }
 
-                        function sendResponse() {
-                            console.log("script length achieved: " + scripts.length);
-                            res.send($("<div>").append($("html").clone()).remove().html());
-                        }
+                            function newScriptSrc(scriptSrc, scriptSrcCallback) {
+                                request(
+                                    "http://tinyurl.com/api-create.php?url=" + scriptSrc,
+                                    function (tinyErr, tinyRes, tinyBody) {
+                                        var newUrl = "/pipe?js=true&url=" + tinyBody;
+                                        scriptSrcCallback(newUrl);
+                                        console.log("tinyUrl changed " + scriptSrc + " to " + newUrl);
+                                    }
+                                );
+                            }
 
-                        var sendResponseWhenDone = _.after(scripts.length, sendResponse);
-                        function newScriptSrc(scriptSrc, scriptSrcCallback) {
-                            request(
-                                "http://tinyurl.com/api-create.php?url=" + scriptSrc,
-                                function (tinyErr, tinyRes, tinyBody) {
-                                    var newUrl = "http://www.roughregister.com/pipe?url=" + tinyBody;
-                                    scriptSrcCallback(newUrl);
-                                    console.log("tinyUrl changed " + scriptSrc + " to " + newUrl);
-                                }
-                            );
-                        }
+                            if ($) {
+                                log("got jQuery loaded on html page");
+                                var allScripts = $("script");
+                                
+                                var scripts = allScripts.filter(function (index) {
+                                    return this.src;
+                                });
 
-                        scripts.each(function (index, elem) {
-                            newScriptSrc(elem.src, function (src) {
-                                elem.src = src;
-                                sendResponseWhenDone();
-                            });
+                                var sendResponseWhenDone = _.after(scripts.length, sendResponse);
+                                scripts.each(function (index, elem) {
+                                    newScriptSrc(elem.src, function (src) {
+                                        elem.src = src;
+                                        sendResponseWhenDone();
+                                    });
+                                });
+                            } else {
+                                res.send("window.alert('Sorry could not load jquery for jsdom');");
+                            }
                         });
                     });
-                });
+                }
             } catch (e) {
                 log("error piping url: " + url);
                 res.send(e.toString() + "<br>" + form);
