@@ -14,9 +14,12 @@
         if (url) {
             log("got url: " + url);
             try {
+                if (url.indexOf("//") === 0) {
+                    url = "http:" + url;
+                }
                 request(url, function (urlErr, urlRes, urlBody) {
                     jsdom.env(urlBody, ["http://code.jquery.com/jquery.js"], function (err, window) {
-                        var $ = window.$;
+                        var $ = window.jQuery;
 
                         var scripts = $("script").filter(function (i, elem) {
                             return elem.src;
