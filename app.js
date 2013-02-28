@@ -14,8 +14,10 @@ notify = console.log;
 
     app.util = require("./util.js");
 
-    log("loading " + "main");
-    require("./main")(app);
+    log("loading root");
+    require("./root")(app);
+
+    app.use(app.router);
 
     var port = process.env.PORT || 5000;
     app.listen(port, function () {

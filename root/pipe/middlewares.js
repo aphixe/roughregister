@@ -4,8 +4,7 @@
     var express = require("express");
 
     module.exports = function (app) {
-        log("adding bodyparser");
-        app.use(express.bodyParser());
+        app.use("/pipe", express.bodyParser());
+        app.use("/public/pipe", express.static(__dirname + "/public"));
     };
-
 }());
