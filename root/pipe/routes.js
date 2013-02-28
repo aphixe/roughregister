@@ -7,58 +7,103 @@
 
     var form = "<form action='/pipe' method='post'><input name='url' type='text'/><input type='submit'/></form>";
 
+    var cachedTinyUrl = {},
+        tinyUrlRequesting = {},
+        tinyUrlId = 0;
+
     function routeHandler(req, res) {
         var url = (req.body && req.body.url) || (req.query && req.query.url),
-            isJsRequest = (req.body && req.body.js) || (req.query && req.query.js);
+            nonHtmlRequest = (req.body && req.body.nonhtml) || (req.query && req.query.nonhtml);
 
         if (url) {
-            log("got url: " + url);
+            log("got url:\n" + url + "\n");
             try {
                 if (url.indexOf("//") === 0) {
                     url = "http:" + url;
                 }
-                if (isJsRequest) {
-                    log("piping straight through: " + isJsRequest);
+
+                var externalUrl = url.replace(/\/$/, ""),
+                    externalHost = externalUrl
+                        .replace("http://", "")
+                        .replace("https://", "");
+
+                if (nonHtmlRequest) {
                     request(url).pipe(res);
                 } else {
                     request(url, function (urlErr, urlRes, urlBody) {
                         jsdom.env({
                             html: urlBody,
-                            src: [overrideInsertBefore],
                             scripts: [
-                                "http://code.jquery.com/jquery.js",
-                                "/public/pipe/overrideDocumentHeadInsertBefore.js"
+                                "http://code.jquery.com/jquery.js"
                             ],
                             done: function (err, window) {
                                 var $ = window.jQuery;
 
+                                function srcResources() {
+                                    return $("script")
+                                        .add($("img"))
+                                        .add($("iframe"))
+                                        .filter(function () {
+                                            return this.src;
+                                        });
+                                }
+                                
                                 function sendResponse() {
-                                    console.log("script length achieved: " + scripts.length);
+                                    srcResources()
+                                        .filter(function () {
+                                            return cachedTinyUrl[this.src];
+                                        }).each(function () {
+                                            this.src = cachedTinyUrl[this.src];
+                                        });
                                     res.send($("<div>").append($("html").clone()).remove().html());
                                 }
 
-                                function newScriptSrc(scriptSrc, scriptSrcCallback) {
-                                    request(
-                                        "http://tinyurl.com/api-create.php?url=" + scriptSrc,
-                                        function (tinyErr, tinyRes, tinyBody) {
-                                            var newUrl = "/pipe?js=true&url=" + tinyBody;
-                                            scriptSrcCallback(newUrl);
-                                            console.log("tinyUrl changed " + scriptSrc + " to " + newUrl);
-                                        }
-                                    );
+                                function getTinyUrl(sourceUrl, tinyCallback) {
+                                    if (cachedTinyUrl[sourceUrl]) {
+                                        tinyCallback(cachedTinyUrl[sourceUrl]);
+                                    } else if (tinyUrlRequesting[sourceUrl]) {
+                                        tinyCallback(sourceUrl);
+                                    } else {
+                                        tinyUrlRequesting[sourceUrl] = true;
+                                        request(
+                                            "http://tinyurl.com/api-create.php?url=" + sourceUrl,
+                                            function (tinyErr, tinyRes, tinyBody) {
+                                                if (tinyBody === "Error") {
+                                                    log("TINYURL ERROR for:\n" + sourceUrl + "\n");
+                                                    tinyCallback(sourceUrl);
+                                                } else {
+                                                    var newUrl = "/pipe?nonhtml=true&url=" + tinyBody;
+                                                    log("got tinyUrl for:\n" + sourceUrl + "\n" + tinyBody + "\n");
+                                                    cachedTinyUrl[sourceUrl] = newUrl;
+                                                    tinyCallback(newUrl);
+                                                }
+                                            }
+                                        );
+                                    }
                                 }
 
                                 if ($) {
-                                    log("got jQuery loaded on html page");
-                                    var allScripts = $("script");
-                                    
-                                    var scripts = allScripts.filter(function (index) {
-                                        return this.src;
-                                    });
+                                    log("got jQuery loaded on html page\n");
+                                    var resources = srcResources();
 
-                                    var sendResponseWhenDone = _.after(scripts.length, sendResponse);
-                                    scripts.each(function (index, elem) {
-                                        newScriptSrc(elem.src, function (src) {
+                                    $("<script>").attr("src", "/public/pipe/overrideDomMethods.js")
+                                        .insertBefore($("head").children(":first"));
+                                    $("<script>").text("window.EXTERNAL_HOST = '" + externalHost + "';")
+                                        .insertBefore($("head").children(":first"));
+
+                                    var sendResponseWhenDone = _.after(resources.length, sendResponse);
+                                    resources.each(function (index, elem) {
+                                        var elemSrc = elem.src;
+
+                                        if (elemSrc.indexOf("//") === 0) {
+                                            elemSrc = "http:" + elemSrc;
+                                        } else if (elemSrc.indexOf("/") === 0) {
+                                            log("changed local url:" + elemSrc);
+                                            elemSrc = externalUrl + elemSrc;
+                                            log("to:" + elemSrc + "\n");
+                                        }
+
+                                        getTinyUrl(elemSrc, function (src) {
                                             elem.src = src;
                                             sendResponseWhenDone();
                                         });
@@ -71,11 +116,11 @@
                     });
                 }
             } catch (e) {
-                log("error piping url: " + url);
+                log("error piping url:\n" + url + "\n");
                 res.send(e.toString() + "<br>" + form);
             }
         } else {
-            log("no url in request");
+            log("no url in request\n");
             res.send(form);
         }
     }
