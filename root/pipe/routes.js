@@ -15,7 +15,10 @@
         var url = (req.body && req.body.url) || (req.query && req.query.url),
             nonHtmlRequest = (req.body && req.body.nonhtml) || (req.query && req.query.nonhtml);
 
-        if (url) {
+        if (url === "http://tinyurl.com/18r") {
+            // it's a request for about:blank
+            res.send("");
+        } else if (url) {
             log("got url:\n" + url + "\n");
             try {
                 if (url.indexOf("//") === 0) {
