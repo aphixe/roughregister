@@ -40,12 +40,17 @@
                                 var $ = window.jQuery;
 
                                 function srcResources() {
-                                    return $("script")
+                                    var rs = $("script")
                                         .add($("img"))
                                         .add($("iframe"))
                                         .filter(function () {
-                                            return this.src;
+                                            return this.src && this.src !== "about:blank";
                                         });
+                                    console.log("resources:");
+                                    rs.each(function (index, elem) {
+                                        console.log(elem.src);
+                                    });
+                                    return rs;
                                 }
                                 
                                 function sendResponse() {
