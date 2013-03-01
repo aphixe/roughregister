@@ -4,7 +4,7 @@ notify = console.log;
 (function () {
     "use strict";
 
-    var app = module.exports = require("express")();
+    var app = module.exports = require("./express-fork")();
     
     app.set("default modules", [
         "./environment",
