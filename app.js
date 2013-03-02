@@ -1,27 +1,8 @@
-log = console.log; // function () {}; // 
-notify = console.log;
-
 (function () {
     "use strict";
 
-    var app = module.exports = require("express")();
-    
-    app.set("default modules", [
-        "./environment",
-        "./middlewares",
-        "./routes"
-    ]);
-
-    app.util = require("./util.js");
-
-    log("loading root");
-    require("./root")(app);
-
-    app.use(app.router);
-
-    var port = process.env.PORT || 5000;
-    app.listen(port, function () {
-        notify("Listening on " + port);
-    });
+    var app = module.exports = require("apper");
+    app.init("./root");
+    app.start(5000);
 
 }());

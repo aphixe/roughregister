@@ -3,7 +3,8 @@
 
     var request = require("request"),
         jsdom = require("jsdom"),
-        _ = require("underscore");
+        _ = require("underscore"),
+        log = require("apper/lib/logger");
 
     var form = "<form action='/pipe' method='post'><input name='url' type='text'/><input type='submit'/></form>";
 
@@ -49,10 +50,6 @@
                                         .filter(function () {
                                             return this.src && this.src !== "about:blank";
                                         });
-                                    console.log("resources:");
-                                    rs.each(function (index, elem) {
-                                        console.log(elem.src);
-                                    });
                                     return rs;
                                 }
                                 
@@ -94,7 +91,7 @@
                                     log("got jQuery loaded on html page\n");
                                     var resources = srcResources();
 
-                                    $("<script>").attr("src", "/public/pipe/overrideDomMethods.js")
+                                    $("<script>").attr("src", "/pipe/public/overrideDomMethods.js")
                                         .insertBefore($("head").children(":first"));
                                     $("<script>").text("window.EXTERNAL_HOST = '" + externalHost + "';")
                                         .insertBefore($("head").children(":first"));
@@ -134,6 +131,6 @@
     }
 
     module.exports = function (app) {
-        app.all("/pipe", routeHandler);
+        app.all(routeHandler);
     };
 }());
