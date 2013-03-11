@@ -110,6 +110,9 @@
 
                                         getTinyUrl(elemSrc, function (src) {
                                             elem.src = src;
+                                            if (src.indexOf("&") >= 0) {
+                                                log("set elem's src to be: " + elem.src);
+                                            }
                                             sendResponseWhenDone();
                                         });
                                     });
