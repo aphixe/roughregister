@@ -10,10 +10,13 @@
     "jsdom": "~0.5.0",
     "pkginfo": "~0.3.0",
     "underscore": "~1.4.4",
-    "apper": "~0.0.1"
+    "apper": "~0.0.1",
+    "formidable": "~1.0.13",
+    "pdfkit": "~0.1.9",
+    "jade": "~0.28.2"
   },
   "scripts": {
-    "start": "node web.js"
+    "start": "node app.js"
   },
   "engines": {
     "node": "0.8.x",

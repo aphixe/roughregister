@@ -1,0 +1,90 @@
+!!!
+html
+  head
+    title Seating Plan Generator
+    link(type='text/css', rel='stylesheet', href='#{mountPathPublic}/css/index.css')
+    link(type='text/css', rel='stylesheet', href='#{mountPathPublic}/css/excite-bike-mod/jquery-ui-1.8.16.custom.css')
+
+  body
+    #screen
+    form(action='#{mountPath}/', method='post', id='seating_plan', enctype='multipart/form-data')
+      #container
+        #header
+          #title Seating Plan
+        #main
+          div
+            h3
+              a(href="#") Test Center
+            .pane
+              .inputs
+                .input
+                  label(for='logo_header') Logo Header?
+                  input#logo_header(type='checkbox', name='logo_header', value='yes', checked="yes")
+                .input
+                  label(for='studying_in') Header Text:
+                  input#studying_in(type='text', name='studying_in', value='IX')
+                .input
+                  label(for='center') Center:
+                  input#center(type='text', name='center', value='Father Agnel Public School')
+                .input
+                  label(for='per_room') Students per room:
+                  input#per_room(type='text', name='per_room', value='24')
+          div
+            h3
+              a(href="#") Rooms
+            .pane
+              .inputs
+                .input
+                  label(for='roomlist') Rooms <br>(Floor-wise):
+                  textarea#roomlist(name='roomlist').
+                    Indira Block IInd Floor: 212, 213, 214, 215, 216, 217
+                    &
+                    Indira Block Ist Floor: 21,23,25,27,29,30,31,32,33,34,35
+                .input
+                  label(for='complementary_room') Complementary Room:
+                  input#complementary_room(type='text', name='complementary_room', value='')
+          div
+            h3
+              a(href="#") Styling
+            .pane
+              .inputs
+                .input
+                  label(for='doc_width') Document Width:
+                  input#doc_width(type='text', name='doc_width', value='554')
+                .input
+                  label(for='doc_height') Document Height:
+                  input#doc_height(type='text', name='doc_height', value='809')
+                .input
+                  label(for='stickers_top') Stickers Top Margin:
+                  input#stickers_top(type='text', name='stickers_top', value='74')
+                .input
+                  label(for='stickers_left') Stickers Left Margin:
+                  input#stickers_left(type='text', name='stickers_left', value='25')
+                .input
+                  label(for='sticker_width') Sticker Cell Width:
+                  input#sticker_width(type='text', name='sticker_width', value='110')
+          div
+            h3
+              a(href="#") Seat IDs
+            .pane
+              .inputs
+                .input
+                  label(for='buffer') Buffer Seats:
+                  input#buffer(type='text', name='buffer', value='10')
+                .input
+                  label(for='seatids') Seat IDs <em>(.csv)</em>:
+                  input#seatids(type='file', size='10', name='seatids', value='List of SeatIDs')
+                .submit
+                  input(type='submit', name='submit', value='Generate Plan')
+                  img#waiting(src='#{mountPathPublic}/images/waiting.gif')
+        #success(title='Download')
+          a#plan_pdf(href="#", target="_blank") Seating Plan
+          a#stickers_pdf(href="#", target="_blank") Stickers
+        #error(title="Error")
+          p#error_message Error!
+
+    script(type='text/javascript', src='#{mountPathPublic}/js/coffee-script.js')
+    script(type='text/javascript', src='#{mountPathPublic}/js/jquery-1.6.2.min.js')
+    script(type='text/javascript', src='#{mountPathPublic}/js/jquery-ui-1.8.16.custom.min.js')
+    script(type='text/javascript', src='#{mountPathPublic}/js/jquery.iframer.js')
+    script(type='text/coffeescript', src='#{mountPathPublic}/js/main.coffee')
