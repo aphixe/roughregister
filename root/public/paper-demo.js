@@ -36,7 +36,6 @@ window.onload = function () {
         y1 = random(0, canvasHeight);
         side = random(0, canvasHeight / 2);
 
-        console.log(x1, y1);
         path = new paper.Path.RegularPolygon(new paper.Point(x1, y1), 3, side);
         path.strokeColor = "darkblue";
         triangles.push(path);
