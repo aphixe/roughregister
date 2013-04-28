@@ -2,24 +2,10 @@
   "name": "roughregister",
   "version": "0.0.1",
   "dependencies": {
-    "express": "~3.1.0",
-    "request": "~2.14.0",
-    "nano": "~3.3.6",
-    "couchapp": "~0.9.1",
-    "locomotive": "~0.3.6",
-    "jsdom": "~0.5.0",
-    "pkginfo": "~0.3.0",
-    "underscore": "~1.4.4",
     "apper": "~0.0.1",
+    "underscore": "~1.4.4",
     "formidable": "~1.0.13",
-    "pdfkit": "~0.1.9",
-    "jade": "~0.28.2"
-  },
-  "scripts": {
-    "start": "node app.js"
-  },
-  "engines": {
-    "node": "0.8.x",
-    "npm": "1.1.x"
+    "express": "~3.2.0",
+    "jade": "~0.30.0"
   }
 }

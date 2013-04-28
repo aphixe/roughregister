@@ -17,7 +17,7 @@
     module.exports = function (app, mountPath) {
         var mountPathPublic = mountPath + "/public";
 
-        app.get(function (req, res) {
+        app.get("/", function (req, res) {
             //res.send("hello");
             res.send(jade.compile(fs.readFileSync(__dirname + "/views/index.jade"))({
                 mountPath: mountPath,
@@ -25,7 +25,7 @@
             }));
         });
 
-        app.post(function (req, res) {
+        app.post("/", function (req, res) {
             var form;
             res.header("Content-Type", "text/html");
             form = new formidable.IncomingForm();

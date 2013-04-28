@@ -3,8 +3,11 @@
 
     var request = require("request"),
         jsdom = require("jsdom"),
-        _ = require("underscore"),
-        log = require("apper/lib/logger");
+        _ = require("underscore");
+
+    var log = function () {
+        console.log.apply(console, arguments);
+    };
 
     var form = "<form action='/pipe' method='post'><input name='url' type='text'/><input type='submit'/></form>";
 
@@ -134,6 +137,6 @@
     }
 
     module.exports = function (app) {
-        app.all(routeHandler);
+        app.all("/", routeHandler);
     };
 }());
