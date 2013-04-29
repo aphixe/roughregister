@@ -53,4 +53,40 @@ window.onload = function () {
         };
     }
     paper.view.draw();
+
+    var lastZoom = paper.view.getZoom();
+    document.addEventListener("gesturechange", function (e) {
+        var newZoom = lastZoom * e.scale;
+        if (newZoom > 0.4 && newZoom < 10) {
+            paper.view.setZoom(newZoom);
+        }
+    });
+    document.addEventListener("gestureend", function (e) {
+        lastZoom = paper.view.getZoom();
+    });
+
+    var lastPageX, lastPageY;
+    document.addEventListener("touchstart", function (e) {
+        if (e.targetTouches.length === 1) {
+            var touch = e.targetTouches[0];
+            lastPageX = touch.pageX;
+            lastPageY = touch.pageY;
+        }
+        lastCenter = paper.view.getCenter();
+        e.preventDefault();
+    });
+    document.addEventListener("touchmove", function (e) {
+        if (e.targetTouches.length === 1) {
+            var touch = e.targetTouches[0];
+            var xDiff = touch.pageX - lastPageX,
+                yDiff = touch.pageY - lastPageY;
+
+            paper.view.setCenter(lastCenter.x - (xDiff / lastZoom), lastCenter.y - (yDiff / lastZoom));
+        }
+    });
+    document.addEventListener("touchend", function (e) {
+        if (e.targetTouches.length === 1) {
+            //lastCenter = paper.view.getCenter();
+        }
+    });
 };
