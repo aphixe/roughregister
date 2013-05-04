@@ -25,11 +25,15 @@ module.exports = function (config) {
     }
 
     return function (req, res, next) {
-        require('cgi')(gitwebCgiPath, {
-            mountPoint: req.url,
-            env: env,
-            stderr: process.stderr
-        })(req, res, next);
+        try {
+            require('cgi')(gitwebCgiPath, {
+                mountPoint: req.url,
+                env: env,
+                stderr: process.stderr
+            })(req, res, next);
+        } catch (e) {
+            console.log("cgi fata", e.toString());
+        }
     };
 };
 

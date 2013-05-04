@@ -15,6 +15,7 @@ module.exports = function (app) {
     app.use("/gitweb", express.static(__dirname + "/gitweb/gitweb-theme"));
     app.use("/gitweb", gitweb({
         projectroot: srcDir,
-        sitename: "All Your Gitteh!"
+        homelink: "NTEG Source Repository",
+        sitename: "NTEG Source Repository"
     }));
 };
