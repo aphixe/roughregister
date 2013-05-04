@@ -13,6 +13,7 @@ module.exports = function (app) {
     });
 
     app.use("/", express.static(__dirname + "/gitweb/theme"));
+    app.use("/gitweb", express.static(__dirname + "/gitweb/theme"));
     app.use("/gitweb", gitweb({
         projectroot: srcDir,
         homelink: "NTEG Source Repository",
