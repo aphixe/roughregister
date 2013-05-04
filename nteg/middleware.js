@@ -12,7 +12,7 @@ module.exports = function (app) {
         repos.handle(req, res);
     });
 
-    app.use("/gitweb", express.static(__dirname + "/gitweb/gitweb-theme"));
+    app.use("/", express.static(__dirname + "/gitweb/theme"));
     app.use("/gitweb", gitweb({
         projectroot: srcDir,
         homelink: "NTEG Source Repository",

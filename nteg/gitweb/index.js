@@ -5,8 +5,8 @@ var cgi = require("cgi");
 
 var configDefaults;
 
-var perlConfigPath = __dirname + '/node-gitweb/gitweb_config.perl',
-    gitwebCgiPath = __dirname + '/node-gitweb/gitweb.cgi';
+var perlConfigPath = __dirname + '/cgi/gitweb_config.perl',
+    gitwebCgiPath = __dirname + '/cgi/gitweb.cgi';
 
 module.exports = function (config) {
     config = config || {};
