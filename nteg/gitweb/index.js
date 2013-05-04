@@ -1,7 +1,7 @@
 var url = require('url'),
     path = require('path');
 
-var cgi = require("cgi");
+var cgi = require('cgi');
 
 var configDefaults;
 
@@ -39,9 +39,9 @@ configDefaults = {
     get homelink() {
         return this.projectroot;
     },
-    sitename: "GitWeb powered by Node",
-    version: "1.7.9",
-    max_depth: "100",
+    sitename: 'GitWeb powered by Node',
+    version: '1.7.9',
+    max_depth: '100',
 
     pathinfo: 1,
 
