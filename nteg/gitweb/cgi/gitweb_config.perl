@@ -138,6 +138,22 @@ our $version = $ENV{'NODE_GITWEB_VERSION'};
 
 
 
+# CUSTOM CODE
+# Enable the 'blame' blob view, showing the last commit that modified
+# each line in the file. This can be very CPU-intensive.
+
+# To enable system wide have in $GITWEB_CONFIG
+# $feature{'blame'}{'default'} = [1];
+# To have project specific config enable override in $GITWEB_CONFIG
+# $feature{'blame'}{'override'} = 1;
+# and in project config gitweb.blame = 0|1;
+
+$feature{'blame'}{'override'} = $ENV{'NODE_GITWEB_BLAME_OVERRIDE'};
+$feature{'blame'}{'default'} = [ $ENV{'NODE_GITWEB_BLAME_DEFAULT'} ];
+
+
+
+
 
 # Make gitweb use an alternative format of the URLs which can be
 # more readable and natural-looking: project name is embedded
@@ -169,6 +185,9 @@ if ($ENV{'NODE_GITWEB_SNAPSHOT_DEFAULT'}) {
 } else {
   $feature{'snapshot'}{'default'} = [ ];
 }
+# CUSTOM CODE
+$feature{'snapshot'}{'override'} = $ENV{'NODE_GITWEB_SNAPSHOT_OVERRIDE'};
+
 
 
 # Avatar support. When this feature is enabled, views such as

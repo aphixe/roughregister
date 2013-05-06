@@ -38,7 +38,8 @@ sub evaluate_uri {
 
 	# Base URL for relative URLs in gitweb ($logo, $favicon, ...),
 	# needed and used only for URLs with nonempty PATH_INFO
-	our $base_url = $my_url;
+    # CUSTOM CODE
+	our $base_url = ""; # $my_url;
 
 	# When the script is used as DirectoryIndex, the URL does not contain the name
 	# of the script file itself, and $cgi->url() fails to strip PATH_INFO, so we
@@ -62,7 +63,8 @@ sub evaluate_uri {
 	}
 
 	# target of the home link on top of all pages
-	our $home_link = $my_uri || "/";
+    # CUSTOM CODE
+	our $home_link = "/nteg/gitweb"; # $my_uri || "/";
 }
 
 # core git executable to use
@@ -1260,7 +1262,8 @@ if (defined caller) {
 sub href {
 	my %params = @_;
 	# default is to use -absolute url() i.e. $my_uri
-	my $href = $params{-full} ? $my_url : $my_uri;
+    # CUSTOM CODE
+	my $href = ""; # $params{-full} ? $my_url : $my_uri;
 
 	# implicit -replay, must be first of implicit params
 	$params{-replay} = 1 if (keys %params == 1 && $params{-anchor});
@@ -3856,7 +3859,8 @@ sub print_search_form {
 	} else {
 		$search_hash = "HEAD";
 	}
-	my $action = $my_uri;
+    # CUSTOM CODE
+	my $action = ""; # $my_uri;
 	my $use_pathinfo = gitweb_check_feature('pathinfo');
 	if ($use_pathinfo) {
 		$action .= "/".esc_url($project);
