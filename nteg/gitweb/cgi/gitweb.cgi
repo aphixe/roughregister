@@ -64,7 +64,7 @@ sub evaluate_uri {
 
 	# target of the home link on top of all pages
     # CUSTOM CODE
-	our $home_link = "/nteg/gitweb"; # $my_uri || "/";
+	our $home_link = "./gitweb"; # $my_uri || "/";
 }
 
 # core git executable to use
@@ -5994,7 +5994,7 @@ sub git_project_list {
 		insert_file($home_text);
 		print "</div>\n";
 	}
-	print $cgi->startform(-method => "get") .
+	print $cgi->startform(-method => "get", -action => "") .
 	      "<p class=\"projsearch\">Search:\n" .
 	      $cgi->textfield(-name => "s", -value => $searchtext) . "\n" .
 	      "</p>" .
