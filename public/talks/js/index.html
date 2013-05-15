@@ -1,0 +1,1326 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Javascript Revisited</title>
+
+        <meta name="description" content="A re-introduction to Javascript as a first-class language">
+        <meta name="author" content="Anup Bishnoi">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <link rel="stylesheet" href="lib/css/reveal.css">
+        <link rel="stylesheet" href="lib/css/theme/sky.css" id="theme">
+
+        <!-- For Humane notifications -->
+        <link rel="stylesheet" href="lib/css/jackedup.css">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- My custom styles -->
+        <link rel="stylesheet" href="css/main.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="lib/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="nagarroAG-logo"></div>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+
+                <section>
+                    <h1>Javascript</h1>
+                    <h2>Revisited</h2>
+                    <br><br>
+                    <h6>Anup Bishnoi</h4>
+                    <p>
+                        <small>anup.bishnoi@nagarro.com</small>
+                    </p>
+                </section>
+
+                <section>
+                    <a target="_blank" href="http://www.youtube.com/playlist?list=PL7664379246A246CB">
+                        <img src="images/javascript-books.jpg" alt="JavaScript: The Good Parts">
+                    </a>
+                    <p>JavaScript: The Good Parts</p>
+                </section>
+
+                <section>
+                    <a class="image" target="_blank" href="https://brendaneich.com/">
+                        <img src="images/brendan.jpeg" alt="Brendan Eich">
+                    </a>
+                    <h2>Brendan Eich</h2>
+                    <h5>CTO, Mozilla Corporation</h5>
+                    <br>
+                    <p>Created JavaScript in 10 days.</p>
+                </section>
+
+                <section>
+                    <h2>Agenda</h2><br>
+                    <ul>
+                        <li>Basics</li><br>
+                        <li>Advanced Concepts</li><br>
+                        <li>JSHint</li><br>
+                        <li>JSON</li><br>
+                        <li>Developer Resources</li>
+                    </ul>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>Basics</h1>
+                </section>
+
+                <section>
+                    <h3>Rapid History</h3><br>
+                    <ul>
+                        <li>Created in 1995 by Brendan Eich for Netscape</li><br>
+                        <li>Formal spec name: <em>ECMAScript</em></li><br>
+                        <li>ES3 supported across all browsers</li><br>
+                        <li>ES4 was a mess, never got implemented</li><br>
+                        <li>ES5 is the latest edition, all modern browsers</li><br>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Use Strict Pragma</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    // CODE
+}());
+                        </code></pre>
+                        <p>ECMAScript 5 Strict Mode</p>
+                    </section>
+                    <section>
+                        <h3>Death to bugs</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = {
+        key: "value",
+        anotherKey: "another value",
+        keyKey: "value value",
+        key: "one more value"
+    };
+}());
+                        </code></pre>
+                        <p>Duplicate key not allowed in object.</p>
+                    </section>
+                    <section>
+                        <h3>Best Practice</h3>
+                        <pre><code contenteditable>
+globalVar = "global value";
+(function () {
+    "use strict";
+
+    log(window.globalVar);
+
+    str = "global";
+
+}());
+                        </code></pre>
+                        <p>Unintended global namespace pollution<br>
+                        not allowed.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Variables</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var undef,
+        num     = 10,
+        str     = "string",
+        bool    = false,
+        obj     = { property: "value" },
+        func    = function () {},
+        nothing = null,
+        camelCasedVar = "convention";
+
+    log(undef);
+
+}());
+                        </code></pre>
+                        <p>Default value for unassigned variable is <em>undefined</em>.</p>
+                    </section>
+
+                    <section>
+                        <h3>Scope</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var outer = "outer value";
+
+    function func() {
+        var inner = "inner value";
+
+        log(outer);
+        log(inner);
+    }
+
+    func();
+
+    log(outer);
+    log(inner);
+
+}());
+                        </code></pre>
+                        <p>Variable scope is simply the function scope,<br>
+                        not block scope.</p>
+                    </section>
+
+                    <section>
+                        <h3>Function Hoisting</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var func1,
+        func2 = function () { return "function 2"; };
+
+    log(func1);
+    log(func2());
+    log(func3());
+
+    func1 = function () { return "function 1"; };
+    log(func1());
+
+    function func3() { return "function 3"; }
+
+}());
+                        </code></pre>
+                        <p>Function declarations get <em>hoisted</em>,<br>
+                        at the top of scope.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Types</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var num     = 10,
+        str     = "string",
+        obj     = { property: "value" },
+        func    = function () {},
+        nothing = null;
+
+    num = str;
+    log(num);
+
+    str = obj;
+    log(str);
+
+    obj = func = nothing;
+    log(obj);
+    log(func);
+
+}());
+                        </code></pre>
+                        <p>Types can be changed at runtime.</p>
+                    </section>
+
+                    <section>
+                        <h3>Type Determination</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    log(typeof "string");
+    log(typeof false);
+    log(typeof undefined);
+    log(typeof function () {});
+
+    log(typeof 245);
+    log(typeof 2.7);
+
+    log(typeof {k: "v"});
+    log(typeof [1, 2]);
+    log(typeof (/regExp/i));
+    log(typeof new Date());
+    log(typeof null);
+
+}());
+                        </code></pre>
+                        <p>Better to use a library for this.</p>
+                    </section>
+
+                    <section>
+                        <h3>Type Conversion</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var num = 10,
+        str = "20",
+        floating = "24.9";
+
+    log(num.toString());
+    log(String(num));
+    log("" + num);
+
+    log(Number(str));
+    log(parseInt(str, 10));
+    log(parseFloat(floating));
+
+    log(+str);
+    log(+floating);
+
+}());
+                        </code></pre>
+                        <p>Multiple ways to do it.</p>
+                        <p>Prefer <span class="code">String(10)</span> and <span class="code">+"10"</span>.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Wrong Equality Checking</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    log("" == []);
+    log(0 == []);
+    log("1" == [1]);
+
+    log("" == 0);
+    log(0 == " ");
+    log("" == " ");
+
+    log(24 == "twenty four");
+    log(24 == "24");
+
+    log(null == undefined);
+
+}());
+                        </code></pre>
+                        <p>
+                            Never use <span class="code">==</span>,
+                            or <span class="code">!=</span>.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>Correct Equality Checking</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    log("" === []);
+    log(0 === []);
+    log("1" === [1]);
+
+    log("" === 0);
+    log(0 === " ");
+    log("" === " ");
+
+    log(24 === "twenty four");
+    log(24 === "24");
+
+    log(null === undefined);
+
+}());
+                        </code></pre>
+                        <p>
+                            Always use <span class="code">===</span>,
+                            or <span class="code">!==</span>.
+                        </p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Object Creation</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var o1 = {
+        property: "o1 property"
+    };
+    log(o1.property);
+
+    // or
+    var o2 = {};
+    o2.property = "o2 property";
+    log(o2.property);
+
+    // or
+    function ClassName() {
+        this.property = "o3 property";
+    }
+    var o3 = new ClassName();
+    log(o3.property);
+}());
+                        </code></pre>
+                        <p>Don't use these words as property names:<br>
+                        <span class="code">constructor</span>,
+                        <span class="code">hasOwnProperty</span>,<br>
+                        reserved words, etc.
+                    </section>
+
+                    <section>
+                        <h3>Object Property Access</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = { property: "value" };
+
+    log(obj.property);
+    log(obj["property"]);
+
+    // New object properties can be created
+    obj.anotherProp = 56;
+    log(obj.anotherProp);
+
+}());
+                        </code></pre>
+                        <p>Dot notation access is slightly faster.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Prototype Chain</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = { property: "value" };
+
+    function MyClass() {
+        this.ownProperty = "something";
+    }
+    MyClass.prototype = obj;
+
+    var newObj = new MyClass();
+
+    var prop;
+    for (prop in newObj) {
+        log(prop);
+        log(newObj[prop]);
+    }
+
+    log(newObj.toString());
+}());
+                        </code></pre>
+                        <p>Walking the prototype chain,<br>
+                        upto <span class="code">Object.prototype</span>.</p>
+                    </section>
+
+                    <section>
+                        <h3>Better Enumeration</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = { property: "value" };
+
+    // Constructor for MyClass
+    function MyClass() {
+        this.ownProperty = "something";
+    }
+    MyClass.prototype = obj;
+
+    var newObj = new MyClass();
+
+    for (var prop in newObj) {
+        if (newObj.hasOwnProperty(prop)) {
+            log(prop);
+            log(newObj[prop]);
+        }
+    }
+}());
+                        </code></pre>
+                        <p>Unless <span class="code">newObj.hasOwnProperty</span><br>
+                        has been overridden.</p>
+                        <p class="fragment">:-\</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Inheritance</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function BaseClass() {
+        this.property = "value";
+    }
+
+    function InheritedClass() {
+        this.ownProperty = "own value";
+    }
+
+    InheritedClass.prototype = new BaseClass();
+
+    var obj = new InheritedClass();
+
+    log(obj.ownProperty);
+    log(obj.property);
+
+}());
+                    </code></pre>
+                    <p>Setting up the prototype chain.</p>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Arrays</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var arr = [1, 2, 3, 4];
+    log(arr.length);
+
+    arr.push(5);                    log(arr);
+    arr.pop();                      log(arr);
+    arr.unshift(0);                 log(arr);
+    arr.shift();                    log(arr);
+
+    arr.splice(1, 2);               log(arr);
+    arr.splice(1, 0, 20, 25, 30);   log(arr);
+
+    log(arr.concat([5]));
+    log(arr.concat(5));
+
+}());
+                        </code></pre>
+                        <p><span class="code">splice</span> alters the array,<br>
+                        <span class="code">concat</span> returns a new array.</p>
+                    </section>
+
+                    <section>
+                        <h3>Dynamic Typing</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var arr = ["one", 2, [1, 2, 3]];
+
+    log(arr);
+    log(arr[2][2]);
+
+    // another way to `push`
+    arr[arr.length] = function () { return 100; };
+
+    log(arr[3].toString());
+    log(arr[3]());
+
+    // Out of bounds
+    log(arr[-1]);
+    log(arr[100]);
+}());
+                        </code></pre>
+                        <p>Accessing non-existent indices<br>
+                        returns <span class="code">undefined</span>,
+                        just as in objects.</p>
+                    </section>
+
+                    <section>
+                        <h3>Arrays are Objects</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var arr = [0, 1, 2],
+        obj = {
+            0: 0,
+            1: 1,
+            2: 2
+        };
+
+    log(arr[1]);
+    log(obj[1]);
+
+    arr.property = "value";
+    log(arr.property);
+
+    // Since object keys can only be strings
+    log(arr["1"]);
+}());
+                        </code></pre>
+                        <p><span class="code">arr.length</span> is simply<br>
+                        <em>(largest numeric key in array) + 1</em>
+                    </section>
+
+                    <section>
+                        <h3>Looping</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var arr = ["zero", "one"];
+
+    log("Using regular for loop");
+    for (var i = 0; i < arr.length ; i++) {
+        log(i);
+        log(arr[i]);
+    }
+
+    log("Using Array#forEach");
+    // native in ES5 (needs a library in ES3)
+    arr.forEach(function (value, index) {
+        log(index);
+        log(value);
+    });
+
+}());
+                        </code></pre>
+                        <p>Don't use <span class="code">for...in</span><br>
+                        to loop over an array.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>&& and ||</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = {
+        func: function () { return 99; }
+    };
+
+    // Guard Operator
+    log(obj && obj.func && obj.func());
+
+    // Default Operator
+    obj.property = obj.property || obj.func();
+    log(obj.property);
+
+}());
+                    </code></pre>
+                    <p>Guard against calling non-functions as functions.</p>
+                    <p>Assign default values to parameters.</p>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Exception Handling</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = {};
+
+    try {
+
+        log(1/0);
+        obj.nonExistentFunc();
+
+    } catch (e) {
+        log("error caught, no harm done.");
+        log(e.toString());
+        log(e.name + ": " + e.message);
+    }
+
+    "here".is.an = "uncaught error";
+    
+}());
+                        </code></pre>
+                        <p>Web pages become unreliable<br>
+                        after an uncaught error</p>
+                    </section>
+
+                    <section>
+                        <h3>Throw your own errors</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    try {
+
+        throw new Error("My custom error");
+
+    } catch (e) {
+        log(e.toString());
+
+        try {
+            throw new TypeError("Why U Mix Types");
+        } catch (err) {
+            log(err.toString());
+        }
+    }
+
+}());
+                        </code></pre>
+                        <p>Nested <span class="code">try...catch</span></p>
+                    </section>
+
+                    <section>
+                        <h3>Throw anything</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var anything = {
+        code: 201,
+        name: "SomeErrorClass",
+        message: "Just got thrown",
+        toString: function () {
+            return "[ " + this.name + ": " + this.message + " ]";
+        }
+    };
+
+    throw anything;
+
+}());
+                        </code></pre>
+                        <p>Create new custom error types</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Debugger</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var a = 10;
+    
+    debugger;
+
+    var doubleValue = function (num) {
+        var result = num * 2;
+        return result;
+    };
+
+    log(doubleValue(a));
+
+}());
+                    </code></pre>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Delayed callback</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    alert("legen... wait for it...");
+
+    setTimeout(function () {
+
+        alert("...dary");
+
+    }, 4000);
+
+}());
+                        </code></pre>
+                        <p>Timing can't be exact to the millisecond<br>
+                        because of the way javascript event loop works.</p>
+                    </section>
+
+                    <section>
+                        <h3>Specify arguments</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    alert("legen... wait for it...");
+
+    setTimeout(function (remaining) {
+
+        alert("..." + remaining);
+        
+    }, 4000, "dary");
+
+}());
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Cancel Timeout</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var id = setTimeout(function () {
+
+        alert("ran successfully");
+        
+    }, 4000);
+
+    clearTimeout(id);
+
+}());
+                        </code></pre>
+                        <p><span class="code">id</span> is just an auto-incrementing integer<br>
+                        to identify the callback</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Recurring callback</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var id = setInterval(function (value) {
+
+        alert(value);
+        
+    }, 2000, "knock knock");
+
+
+    setTimeout(function () {
+        clearInterval(id);
+    }, 10000);
+
+}());
+                    </code></pre>
+                    <p>Both setTimeout and setInterval won't work<br>
+                    if js is stuck in an infinite loop</p>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>Advanced Concepts</h1>
+                    <h3>Or just, Functions</h3>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>First-class variables</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function shout() {
+        log("Function ran!");
+    }
+
+    function callFunction(f) {
+        f();
+    }
+
+    callFunction(shout);
+
+}());
+                        </code></pre>
+                        <p>Functions can be passed as parameters to<br>
+                        and returned as result from other functions</p>
+                    </section>
+
+                    <section>
+                        <h3>IIFE</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    (function () {
+        
+        (function () {
+        
+            log("getting logged");
+            
+        }());
+    }());
+
+}());
+                        </code></pre>
+                        <p>Immediately Invoked Function Expression</p>
+                    </section>
+
+                    <section>
+                        <h3>Functions' return value</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func1() {
+        log("function 1 called");
+        return "return value";
+    }
+    
+    function func2() {
+        log("function 2 called");
+    }
+
+    log(func1());
+
+    log(func2());
+
+}());
+                        </code></pre>
+                        <p>All functions return a value (<span class="code">undefined</span> by default)<br>
+                        Constructors return the created object</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Closures</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function adder(howMany) {
+        return function (num) {
+            return howMany + num;
+        };
+    };
+
+    var twoPlus = adder(2);
+
+    log(twoPlus(9));
+
+}());
+                        </code></pre>
+                        <p>All functions create a new scope,<br>
+                        "closing over" the variables used inside.<br>
+                        Here, <span class="code">twoPlus</span> closes over
+                        <span class="code">howMany</span></p>
+                    </section>
+
+                    <section>
+                        <h3>Module Pattern</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var lady;
+    lady = { age: 20 };
+    lady.age = 40;
+    log(lady.age);
+
+    lady = (function () {
+        // private variable `age`.
+        var age = 20;
+        return {
+            getAge: function () { return age; }
+        };
+    }());
+
+    log(lady.age);
+    log(lady.getAge());
+}());
+                        </code></pre>
+                        <p>You can't set the <span class="code">lady</span>'s
+                        <span class="code">age</span> from outside<br>
+                        its closure in any way in the second case.</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Functions are Objects!</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var func1 = function () {};
+
+    func1.someValue = "some value";
+    log(func1.someValue);
+
+    function func2() {
+        log("function 2 ran");
+        func2.someProperty = "some property";
+    }
+    log(func2.someProperty);
+
+    func2();
+    log(func2.someProperty);
+
+}());
+                    </code></pre>
+                    <p>Don't fight it, embrace it.</p>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>What does `this` mean?</h3>
+                        <pre><code contenteditable>
+window.someProperty = "some property";
+function funcOutside() {
+    log(this.someProperty);
+}
+(function () {
+    "use strict";
+
+    function funcInStrictMode() {
+        log(this.someProperty);
+    }
+
+    funcOutside();
+    funcInStrictMode();
+}());
+                        </code></pre>
+                        <p>Without strict mode, function call has<br>
+                        <span class="code">this</span> set to
+                        <span class="code">window</span>.<br>
+                        But in Strict Mode, <span class="code">this</span> is
+                        <span class="code">undefined</span>.</p>
+                    </section>
+
+                    <section>
+                        <h3>Inside A Constructor</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function MyClass() {
+        this.property = "value";
+    }
+
+    var obj = new MyClass();
+    
+    log(obj.property);
+
+}());
+                        </code></pre>
+                        <p>In a constructor, <span class="code">this</span> is the object being created.</p>
+                    </section>
+
+                    <section>
+                        <h3>In a method call</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    var obj = {
+        property: "value",
+        func: function () {
+
+            log(this.property);
+
+        }
+    };
+
+    obj.func();
+
+}());
+                        </code></pre>
+                        <p>In a function called as method on an object,<br>
+                        <span class="code">this</span> is the object itself.</p>
+                    </section>
+
+                    <section>
+                        <h3></h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function logWhich() {
+        log(this.which);
+    }
+
+    var obj1 = {
+        which: "object 1",
+        func: logWhich
+    };
+    var obj2 = {
+        which: "object 2",
+        func: logWhich
+    };
+
+    obj1.func();
+    obj2.func();
+
+}());
+                        </code></pre>
+                        <p>Whoever calls the function as its method,<br>
+                        becomes the context (<span class="code">this</span>)
+                        for the function</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Setting the context</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func() {
+        log(this.property);
+    }
+
+    func.call({ property: "value" });
+
+}());
+                        </code></pre>
+                        <p><span class="code">Function.prototype.call</span><br>
+                        provides this to every function</p>
+                    </section>
+
+                    <section>
+                        <h3>Call with arguments</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func(arg1, arg2) {
+        log(this.property);
+        log(arg1);
+        log(arg2);
+    }
+
+    func.call({ property: "value" }, 10, "20");
+
+}());
+                        </code></pre>
+                        <p>Default value for arguments is <span class="code">undefined</span></p>
+                    </section>
+
+                    <section>
+                        <h3>Applying arguments</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func(arg1, arg2) {
+        log(this.property);
+        log(arg1);
+        log(arg2);
+    }
+
+    func.apply({ property: "value" }, [10, "20"]);
+
+}());
+                        </code></pre>
+                        <p>Allows sending in an array as arguments</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Function Arguments</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func() {
+        log(this);
+        for (var i = 0; i < arguments.length; i++) {
+            log(arguments[i]);
+        }
+    }
+
+    func.call("context", "argument 1", "argument 2");
+}());
+                    </code></pre>
+                    <p><span class="code">arguments</span> is array-like,<br>
+                    but not an instance of <span class="code">Array</span></p>
+                </section>
+
+                <section>
+                    <h3>Wrapping a function</h3>
+                    <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function wrap(f) {
+        return function () {
+            log("wrapped function being run");
+            return f.apply(this, arguments);
+        };
+    }
+
+    function square(arg) {
+        return arg * arg;
+    }
+
+    var wrappedSquare = wrap(square);
+
+    log(wrappedSquare(5));
+}());
+                    </code></pre>
+                    <p>The wrapped function won't know the difference</p>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Bound function context</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func() {
+        log(this);
+    }
+
+    var bound = func.bind({ property: "value" });
+
+    func();
+    bound();
+
+}());
+                        </code></pre>
+                        <p><span class="code">bound</span> can never<br>
+                        have its context changed now</p>
+                    </section>
+
+                    <section>
+                        <h3>Bound with arguments</h3>
+                        <pre><code contenteditable>
+(function () {
+    "use strict";
+
+    function func(arg1, arg2) {
+        log(this);
+        log(arg1);
+        log(arg2);
+    }
+
+    var bound = func.bind("bound context", "argument 1");
+
+    bound("argument 2");
+
+}());
+                        </code></pre>
+                        <p>Newly passed arguments add up</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Semicolons are optional</h3>
+                        <pre><code contenteditable>
+(function () {
+
+    [1, 2, 3].forEach(function (value) {
+        log(value)
+    })
+    
+    var a = 10
+
+}())
+                        </code></pre>
+                        <p>Optional, except for some confusing cases.</p>
+                    </section>
+
+                    <section>
+                        <h3>Optional with problems</h3>
+                        <pre><code contenteditable>
+(function () {
+    
+    var a = 10
+
+    [1, 2, 3].forEach(function (value) {
+        log(value)
+    })
+
+}())
+                        </code></pre>
+                        <p>So just use them always.</p>
+                        <br><br>
+                        <p class="fragment">Seriously.</p>
+                    </section>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>JSHint</h1>
+                    <h4>Based on, but broader than, JSLint</h4>
+                </section>
+
+                <section>
+                    <h2>JSHint</h2>
+                    <a target="_blank" href="http://www.jshint.com">
+                        <img src="images/jshint.png" alt="JSHint">
+                    </a>
+                    <p>Never ever code without a linter.<br>
+                    Linting kills bugs before they are born.</p>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>JSON</h1>
+                    <h4>Created by Douglas Crockford</h4>
+                </section>
+
+                <section>
+                    <h3>JSON</h3>
+                    <pre><code contenteditable>
+{
+    "key": "in double quotes",
+    "object": {
+        "nested": 1,
+        "functions": "not allowed",
+        "canPassThemAs": "function () {}"
+    },
+    "array": ["is", "the", { "same": "as before" }],
+    "null": null,
+    "undefined": "not allowed"
+}
+                    </code></pre>
+                    <p>JavaScript Object Notation</p><br>
+                    <p>Simply a subset of JS objects, with<br>
+                    keys specified as double-quoted strings</p>
+                    <a target="_blank" href="http://www.json.org/">Complete Spec (really small)</a>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>Developer Resources</h1>
+                </section>
+
+                <section>
+                    <h3>Developer Resources</h3>
+                    <ul>
+                        <li>
+                            <a target="_blank" href="http://developer.mozilla.org/">
+                                Mozilla Developer Network
+                            </a>
+                            <br><br><p>Prefix google queries with "mdn":</p>
+                            <ul>
+                                <li>"mdn Object.create"</li>
+                                <li>"mdn -webkit-transition"</li>
+                                <li>"mdn array length"</li>
+                                <li>"mdn css float"</li>
+                            </ul><br>
+                        </li>
+
+                        <li><a target="_blank" href="http://www.html5rocks.com">HTML5 Rocks</a></li><br>
+                        <li><a target="_blank" href="http://docs.webplatform.org">Web Platform Docs</a></li>
+                    </ul><br>
+                </section>
+
+                <section>
+                    <h3>DO NOT GO TO W3SCHOOLS</h3>
+                    <p class="fragment">Check out <a target="_blank" href="http://www.w3fools.com/">W3Fools</a></p>
+                </section>
+
+                <section data-state="soothe">
+                    <h1>THE END</h1>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="lib/js/reveal.js"></script>
+        <script src="lib/js/zepto.js"></script>
+        <script src="lib/js/humane.js"></script>
+
+        <script src="https://raw.github.com/Remotes/Remotes/master/dist/remotes.ne.min.js"></script>
+
+        <script type="text/javascript" src="js/main.js"></script>
+
+    </body>
+</html>

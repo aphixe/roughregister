@@ -1,0 +1,80 @@
+.nagarroAG-logo {
+    position: fixed;
+    top: -15px;
+    right: -22px;
+    width: 236px;
+    height: 94px;
+    opacity: 0.5;
+    -webkit-transform: scale(0.8);
+    background: url(../images/nagarroAG.png) no-repeat;
+}
+
+body > .reveal {
+  font-size: 26px;
+}
+
+body > .reveal code {
+    max-height: 400px;
+}
+
+.run-code {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    background: url(../images/glyphicons/glyphicons_220_play_button.png) no-repeat;
+}
+
+span.code {
+    border-bottom: 1px dotted black;
+    font-weight: bold;
+}
+
+.humane-bigbox {
+    left: 40% !important;
+    width: auto !important;
+    opacity: 0.6 !important;
+    text-align: left;
+}
+
+/*** Fonts ***/
+
+/* Quicksand */
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Quicksand-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/Quicksand-Bold.woff') format('woff');
+}
+
+/* Open Sans */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/OpenSans.woff') format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/OpenSans-Bold.woff') format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: url('fonts/OpenSans-Italic.woff') format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: url('fonts/OpenSans-BoldItalic.woff') format('woff');
+}
