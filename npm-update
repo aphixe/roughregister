@@ -1,20 +1,20 @@
-sudo npm install
-sudo npm update
+npm install
+npm update
 
 cd pipe
-sudo npm install
-sudo npm update
+npm install
+npm update
 cd ..
 
 cd nteg
-sudo npm install
-sudo npm update
+npm install
+npm update
 cd blog
-sudo npm install
-sudo npm update
+npm install
+npm update
 cd ../..
 
 cd seating-plan
-sudo npm install
-sudo npm update
+npm install
+npm update
 cd ..
