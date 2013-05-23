@@ -12,13 +12,11 @@ var seating = require("./pdf/seating"),
 var log = function () {};
 
 module.exports = function (app, mountPath) {
-    var mountPathPublic = mountPath + "/public";
-
     app.get("/", function (req, res) {
         //res.send("hello");
         res.send(jade.compile(fs.readFileSync(__dirname + "/views/index.jade"))({
             mountPath: mountPath,
-            mountPathPublic: mountPathPublic
+            mountPathPublic: mountPath
         }));
     });
 
@@ -52,7 +50,7 @@ module.exports = function (app, mountPath) {
                                 res.end(JSON.stringify(filenames));
                             }
                         },
-                        mountPathPublic
+                        mountPath
                     );
                 } else {
                     log(errors);
