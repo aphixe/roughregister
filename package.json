@@ -1,10 +1,26 @@
 {
   "name": "roughregister",
-  "version": "0.0.1",
+  "description": "Rough collection of little node.js apps",
+  "version": "0.0.2",
+  "author": {
+    "name": "Anup Bishnoi",
+    "email": "pixelsallover@gmail.com"
+  },
   "dependencies": {
     "apper": "~0.0.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anupbishnoi/roughregister"
+  },
+  "main": "index",
   "scripts": {
+    "prepublish": "npm prune",
+    "test": "make test",
     "start": "node server.js"
-  }
+  },
+  "engines": {
+    "node": "*"
+  },
+  "license": "MIT"
 }
