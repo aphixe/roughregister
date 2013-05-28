@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "pushover": "~1.3.3",
-    "express": "~3.2.2",
+    "express": "*",
     "cgi": "~0.2.0"
   }
 }
