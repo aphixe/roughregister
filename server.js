@@ -1,4 +1,4 @@
-var app = require("apper")();
+var app = require("apper")(__dirname);
 
 if (app.init()) {
     app.start(process.env.PORT || 8000);
