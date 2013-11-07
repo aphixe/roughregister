@@ -1,0 +1,7 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect("/drone");
+    socket.on("connected", function () {
+        console.log("Connected!");
+    })
+</script>
