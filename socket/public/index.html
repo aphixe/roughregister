@@ -1,6 +1,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    var socket = io.connect("http://localhost:3000/socket");
+    var socket = io.connect("/socket");
     socket.on("from root", function () {
         console.log("from root");
     });
