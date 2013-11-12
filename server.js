@@ -1,6 +1,6 @@
 var app = require("apper")(__dirname);
 
-if (app.init({ sockets: true })) {
+if (app.init()) {
     app.start(process.env.PORT || 3000);
 }
 
