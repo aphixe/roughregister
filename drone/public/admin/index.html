@@ -1,0 +1,17 @@
+<body>
+    <form id="authorize" method="post" onsubmit="connect(); return false;">
+        <input id="password" type="password" name="password">
+        <input type="submit">
+    </form>
+
+    <button onclick="drone('takeoff')">Take Off!</button>
+    <button onclick="drone('land')">Land</button>
+
+    <button onclick="voting('start')">Start Voting</button>
+    <button onclick="voting('stop')">Stop Voting</button>
+
+    <button onclick="streamVideo()">Stream video to projector</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/drone/admin/main.js"></script>
+</body>

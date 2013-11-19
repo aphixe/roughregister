@@ -1,16 +1,14 @@
-var socket = io.connect("http://localhost:3000/drone");
+var socket = io.connect(location.origin + "/drone");
 
 socket.on("connect", function () {
     socket.emit("identification", { type: "player" });
-
-    socket.on("authorized", function () {
-        sendLog("The playa is heya!");
-    });
 });
 
-function vote(call) {
-    socket.emit("vote", { call: call });
-}
+socket.on("authorized", function () {
+    sendLog("The playa is heya!");
+});
+
+var vote = socket.emit.bind(socket, "vote");
 
 function sendLog(msg) {
     socket.send(msg);
