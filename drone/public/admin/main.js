@@ -11,7 +11,7 @@ function connect() {
     });
 }
 
-var drone = socket.emit.bind(socket, "command"),
+var command = socket.emit.bind(socket, "command"),
     voting = socket.emit.bind(socket, "voting"),
     streamVideo = socket.emit.bind(socket, "stream video");
 
