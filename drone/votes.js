@@ -4,6 +4,8 @@ var votes = {};
 EventEmitter.call(votes);
 votes.__proto__ = EventEmitter.prototype;
 
+var winners = [];
+
 var rounds = [
         {
             flipLeft: [],
@@ -32,11 +34,51 @@ function roundAndRound() {
         }
     });
 
-    votes.emit("winner", {
+    var winner = {
         animation: maxVoted,
         player: lastRound[maxVoted] && lastRound[maxVoted][0]
-    });
+    };
+    winners.push(winner);
+
+    votes.emit("winner", winner);
 }
+
+votes.on("end game", function (callback) {
+    if (!votes.intervalId) {
+        callback && callback("No game in progress currently.");
+        return;
+    }
+    votes.emit("stop");
+
+    console.log(winners);
+
+    var grandWinner;
+    if (!winners[0]) {
+        callback && callback("There have been no winners in the game!");
+        return;
+    }
+
+    var winCount = winners.reduce(function (winCount, winner) {
+        if (winner.player) {
+            winCount[winner.player] = winCount[winner.player] || 0;
+            winCount[winner.player] += 1;
+        }
+        return winCount;
+    }, {});
+
+    var winnerNames = Object.keys(winCount);
+
+    var grandWinner = winnerNames.reduce(function (grandWinner, winner) {
+        if (winCount[winner] > winCount[grandWinner]) {
+            grandWinner = winner;
+        }
+        return grandWinner;
+    }, winnerNames[0]);
+
+    votes.emit("grand winner", grandWinner);
+
+    winners = [];
+});
 
 votes.on("increment", function (animation, voter, callback) {
     if (!votes.intervalId) {
@@ -62,6 +104,7 @@ votes.on("start", function () {
 });
 votes.on("stop", function () {
     clearInterval(votes.intervalId);
+    votes.intervalId = null;
     rounds.push({});
 });
 

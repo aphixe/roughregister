@@ -7,7 +7,8 @@
     "email": "pixelsallover@gmail.com"
   },
   "dependencies": {
-    "apper": "*"
+    "apper": "*",
+    "underscore": "*"
   },
   "repository": {
     "type": "git",
